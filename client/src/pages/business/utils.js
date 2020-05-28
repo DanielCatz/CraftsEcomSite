@@ -7,6 +7,10 @@ const LocalStorageMutator = {
     return JSON.parse(data);
   },
 
+  setLocalStorageCart: cart => {
+    if (!cart) return;
+    localStorage.setItem('cart', JSON.stringify(cart));
+  },
   addProductToCartLocalStorage: product => {
     let cart = LocalStorageMutator.getCartFromLocalStorage();
 
@@ -42,6 +46,15 @@ const LocalStorageMutator = {
       cart.splice(entryIndex, 1);
     }
 
+    localStorage.setItem('cart', JSON.stringify(cart));
+  },
+
+  clearProductFromCartLocalStorage: product => {
+    const cart = LocalStorageMutator.getCartFromLocalStorage();
+
+    const entryIndex = cart.findIndex(x => x.key === product.slug);
+    // remove entry
+    if (entryIndex !== -1) cart.splice(entryIndex, 1);
     localStorage.setItem('cart', JSON.stringify(cart));
   }
 };

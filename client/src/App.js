@@ -1,19 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Hidden } from '@material-ui/core';
-import { Container } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import Home from './pages/home';
-import NotFound from './pages/notfound';
-import BrowseProductsContainer from './pages/browseproductscontainer';
-import CartBar from './pages/components/CartBar';
-import Navbar from './pages/components/navbar';
-import CartPageContainer from './pages/CartPageContainer';
-import LocalStorageMutator from './pages/business/utils';
-import { loadCartFromLocalStorage } from './redux/actions/cartActions';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import ContentContainer from './pages/ContentContainer';
 
 // css definition here
@@ -23,13 +12,18 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex'
   },
+  base: {
+    background: '#FFF9F9'
+  },
   appBar: {
+    background: 'transparent',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     })
   },
   appBarShift: {
+    background: 'transparent',
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
@@ -50,27 +44,41 @@ const useStyles = makeStyles(theme => ({
     flexShrink: 0
   },
   drawerPaper: {
-    width: drawerWidth
+    width: drawerWidth,
+    overflowX: 'hidden'
   },
   drawerHeader: {
-    display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-start'
+    // ...theme.mixins.toolbar,
+    justifyContent: 'flex-start',
+    position: 'fixed',
+    minHeight: 128,
+    background: 'white',
+    overflowY: 'hidden',
+    zIndex: '1000'
+  },
+  drawerHeaderBlock: {
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    // ...theme.mixins.toolbar,
+    justifyContent: 'flex-start',
+    minHeight: 120,
+    background: 'white',
+    overflowY: 'hidden'
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    minHeight: '60vh',
+    background: '#FFF9F9',
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
-    }),
-    marginRight: -drawerWidth
+    })
   },
   toolbar: {
-    background: '#FFFFFF',
     minHeight: 128,
     alignItems: 'flex-start',
     paddingTop: theme.spacing(1),
@@ -81,7 +89,7 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     }),
-    marginRight: 0
+    marginRight: drawerWidth
   },
   menuButton: {
     marginRight: theme.spacing(2)
@@ -95,18 +103,32 @@ const App = () => {
 
   const closeBar = () => {
     setOpen(false);
-    console.log('closed');
   };
 
   const openBar = () => {
     setOpen(true);
-    console.log('opened');
   };
 
   return (
-    <div>
-      <ContentContainer classes={classes} theme={theme} isBarOpen={isBarOpen} closeBar={closeBar} openBar={openBar} />
-    </div>
+    <Router>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Baloo+Tammudu+2&family=Bellota:ital,wght@0,400;0,700;1,700&display=swap"
+        rel="stylesheet"
+      />
+
+      <Route
+        render={props => (
+          <ContentContainer
+            classes={classes}
+            theme={theme}
+            isBarOpen={isBarOpen}
+            closeBar={closeBar}
+            openBar={openBar}
+            {...props}
+          />
+        )}
+      />
+    </Router>
   );
 };
 

@@ -6,37 +6,33 @@ import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import RemoveOutlinedIcon from '@material-ui/icons/RemoveOutlined';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import TextField from '@material-ui/core/TextField';
+import { Hidden } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { Link } from 'react-router-dom';
 
 const CartItem = props => {
   const { product } = props;
 
   const useStyles = makeStyles(theme => ({
     root: {
-      display: 'flex'
+      textAlign: '-webkit-center'
     },
     details: {
+      alignItems: 'center',
       display: 'flex',
       flexDirection: 'column'
     },
-    content: {
-      flex: '1 0 auto'
-    },
-    cover: {
-      width: 151
+    image: {
+      alignItems: 'center',
+      width: 120,
+      height: 120
     },
     controls: {
       display: 'flex',
-      alignItems: 'center',
-      paddingLeft: theme.spacing(1),
-      paddingBottom: theme.spacing(1)
-    },
-    playIcon: {
-      height: 38,
-      width: 38
+      alignItems: 'center'
     }
   }));
 
@@ -45,46 +41,39 @@ const CartItem = props => {
   return (
     <div key={product.slug}>
       <Card className={classes.root}>
-        <Button color="secondary" onClick={props.clearItem}>
-          x
-        </Button>
-        <CardMedia
-          className={classes.cover}
-          image={product.images[0].fields ? product.images[0].fields.file.url : 'http://tachyons.io/img/avatar_1.jpg'}
-          title="Live from space album cover"
-        />
-        <div className={classes.details}>
-          <CardContent className={classes.content}>
-            <Typography component="h5" variant="h5">
-              {product.name}
-            </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              {product.name}
-            </Typography>
-          </CardContent>
+        <CardContent>
+          <Link to={`/browseproducts/productdisplay/${product.slug}`}>
+            <CardMedia
+              className={classes.image}
+              image={
+                product.images[0].fields ? product.images[0].fields.file.url : 'http://tachyons.io/img/avatar_1.jpg'
+              }
+              title="image desc"
+            />
+          </Link>
           <div className={classes.controls}>
             <IconButton aria-label="remove" onClick={props.removeItem}>
               {theme.direction === 'rtl' ? <AddOutlinedIcon /> : <RemoveOutlinedIcon />}
             </IconButton>
             <TextField
-              id="outlined-number"
               label="Quantity"
-              type="number"
+              id="outlined-size-normal"
               value={product.quantity}
+              variant="outlined"
               InputLabelProps={{
                 shrink: true
               }}
-              variant="outlined"
             />
             <IconButton aria-label="add" onClick={props.addItem}>
               {theme.direction === 'rtl' ? <RemoveOutlinedIcon /> : <AddOutlinedIcon />}
             </IconButton>
           </div>
-        </div>
-        <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5">
-            {product.price}
-          </Typography>
+
+          <Link to={`/browseproducts/productdisplay/${product.slug}`}>
+            <Typography component="h8" variant="h8">
+              ${product.price}
+            </Typography>
+          </Link>
         </CardContent>
       </Card>
     </div>

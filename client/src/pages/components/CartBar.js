@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Drawer from '@material-ui/core/Drawer';
+import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -11,19 +12,28 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import Product from './ProductContainer';
+import ShoppingCartSharpIcon from '@material-ui/icons/ShoppingCartSharp';
+import Box from '@material-ui/core/Box';
+import CartItemContainer from './CartItemContainer';
 import { addItem } from '../../redux/actions/cartActions';
 
 const CartBar = props => {
   const { cart, classes, theme, isBarOpen, closeBar, openBar } = props;
 
-  const cartList = cart.map(item => <Product product={item} key={item.key} />);
+  const cartList = cart.map(item => (
+    <div>
+      <ListItem button>
+        <CartItemContainer product={item} key={item.key} />
+      </ListItem>
+      <Divider />
+    </div>
+  ));
 
   // return <div className="cartbar"></div>;
   /* <Drawer className="drawer" variant="persistent" anchor="right" open="open">
       {cartList}
     </Drawer>
-*/
+  */
   return (
     <Drawer
       className={classes.drawer}
@@ -34,28 +44,24 @@ const CartBar = props => {
         paper: classes.drawerPaper
       }}
     >
-      <div className={classes.drawerHeader}>
+      <Box className={classes.drawerHeader}>
         <IconButton onClick={closeBar}>
-          {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          <ChevronLeftIcon />
         </IconButton>
-      </div>
-      <Divider />
+        <IconButton onClick={closeBar}>
+          <ShoppingCartSharpIcon />
+        </IconButton>
+        #items
+        <div>Subtotal: $Dollaz!</div>
+        <List>
+          <Button variant="outlined">Proceed to Checkout</Button>
+        </List>
+      </Box>
+      <Box className={classes.drawerHeaderBlock} />
+
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <Divider />
+        {cartList}
       </List>
     </Drawer>
   );

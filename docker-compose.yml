@@ -1,0 +1,53 @@
+version: '3.7'
+
+services:
+    server:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      image: myapp-server
+      container_name: myapp-node-express
+      volumes:
+       - ./app
+       - /app/node_modules
+      ports:
+        - "3001:3001"
+      depends_on:
+        - mongo
+      env_file: ./client/.env
+      environment:
+        - MONGO_HOSTNAME=localhost
+        - MONGO_PORT=27017
+        - MONGO_DB=flowerstore
+      networks:
+        - app-network  
+    mongo:
+      image: mongo
+      container_name: myapp-mongodb
+      ports:
+        - "27017:27017"
+      networks:
+        - app-network 
+    client:
+      build:
+        context: ./client
+        dockerfile: Dockerfile
+      image: myapp-client
+      container_name: myapp-react-client
+      volumes:
+        - ./client/app
+        - /client/app/node_modules
+      depends_on:
+        - server
+      ports:
+        - "3000:3000"
+      networks:
+        - app-network    
+networks:
+    app-network:
+        driver: bridge          
+volumes:
+    data-volume:
+    node_modules:
+    web-root:
+      driver: local

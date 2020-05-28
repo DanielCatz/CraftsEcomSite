@@ -2,7 +2,7 @@ import axios from 'axios';
 // api.js
 let API_URL;
 
-process.env.NODE_ENV == 'test' ? (API_URL = 'http://localhost:3001/') : (API_URL = '');
+process.env.NODE_ENV == 'test' ? (API_URL = '') : (API_URL = 'http://localhost:3001/');
 
 console.log(`${API_URL} is the url`);
 
@@ -18,6 +18,13 @@ const API = {
       urlHash
     }),
 
+  getUser: email => axios.post(`${API_URL}api/getUser`, { email }),
+
+  createUser: user => axios.post(`${API_URL}api/createUser`, user),
+
+  getCart: id => axios.get(`${API_URL}api/getCart/${id}`),
+
+  upsertCart: (id, cart) => axios.post(`${API_URL}api/upsertCart`, { id, cart }), // todo
   // For Testing Only
 
   GetLinkRow: id => axios.get(`${API_URL}api/link/${id}`),

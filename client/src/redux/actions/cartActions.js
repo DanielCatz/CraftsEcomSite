@@ -1,7 +1,7 @@
 export const ADD_ITEM = 'ADD_ITEM';
 export const LOAD_CART = 'LOAD_CART';
 export const REMOVE_ITEM = 'REMOVE_ITEM';
-export const REMOVE_ALL_SPECIFIC_ITEM = 'REMOVE_ALL_SPECIFIC_ITEM';
+export const CLEAR_ITEM = 'CLEAR_ITEM';
 export const REMOVE_ALL_ITEMS = 'REMOVE_ALL_ITEMS';
 export const UPDATE_CART_FROM_STORAGE = 'UPDATE_CART_FROM_STORAGE';
 
@@ -25,9 +25,9 @@ export function removeAllItems(product) {
   };
 }
 
-export function removeAllSpecificItem(product) {
+export function clearItem(product) {
   return {
-    type: REMOVE_ALL_SPECIFIC_ITEM,
+    type: CLEAR_ITEM,
     payload: product
   };
 }

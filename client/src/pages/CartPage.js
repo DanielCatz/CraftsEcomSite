@@ -1,15 +1,26 @@
 import React from 'react';
-import CartItemContainer from './components/CartItemContainer';
+import Button from '@material-ui/core/Button';
+import CartPageItemContainer from './components/CartPageItemContainer';
 
 const CartPage = props => {
   const { cart } = props;
 
-  const cartList = cart.map(product => <CartItemContainer product={product} key={product.key} />);
-  console.log(cart);
+  const cartList = cart.map(product => <CartPageItemContainer product={product} key={product.key} />);
   return (
     <div>
       <div> Cart Page </div>
       <div> {cartList} </div>
+      <div>
+        {' '}
+        {cartList.length > 0 ? (
+          <Button variant="contained" color="primary">
+            {' '}
+            Checkout{' '}
+          </Button>
+        ) : (
+          <div />
+        )}
+      </div>
     </div>
   );
 };

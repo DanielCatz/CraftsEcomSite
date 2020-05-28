@@ -1,47 +1,75 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Hidden } from '@material-ui/core';
+import clsx from 'clsx';
 import Home from './home';
 import NotFound from './notfound';
 import BrowseProductsContainer from './browseproductscontainer';
 import CartBar from './components/CartBar';
 import Navbar from './components/navbar';
+import Footer from './components/Footer';
+import Callback from './Callback';
 import CartPageContainer from './CartPageContainer';
 import LocalStorageMutator from './business/utils';
 import { loadCartFromLocalStorage } from '../redux/actions/cartActions';
+import Auth from '../Auth/Auth';
+import Account from './Account';
 
 class ContentContainer extends Component {
+  constructor(props) {
+    super(props);
+    this.auth = new Auth(this.props.history);
+    console.log(this.props);
+  }
+
   componentWillMount() {
     this.props.loadCartFromLocalStorage(LocalStorageMutator.getCartFromLocalStorage());
   }
 
   render() {
     const { classes, theme, isBarOpen, closeBar, openBar } = this.props;
-
     return (
       <div>
-        <Router>
-          <Navbar classes={classes} theme={theme} isBarOpen={isBarOpen} closeBar={closeBar} openBar={openBar} />
-          <Hidden lgDown>
-            {LocalStorageMutator.getCartFromLocalStorage().length > 0 ? (
-              <CartBar classes={classes} theme={theme} isBarOpen={isBarOpen} closeBar={closeBar} openBar={openBar} />
-            ) : (
-              <div />
-            )}
-          </Hidden>
-          <div className="content">
-            <div className="center-col">
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/home" component={Home} />
-                <Route path="/browseproducts" component={BrowseProductsContainer} />
-                <Route path="/cart" component={CartPageContainer} />
-                <Route path="*" component={NotFound} />
-              </Switch>
-            </div>
+        <Navbar
+          classes={classes}
+          theme={theme}
+          isBarOpen={isBarOpen}
+          closeBar={closeBar}
+          openBar={openBar}
+          auth={this.auth}
+        />
+        <Hidden lgDown>
+          {LocalStorageMutator.getCartFromLocalStorage().length > 0 ? (
+            <CartBar classes={classes} theme={theme} isBarOpen={isBarOpen} closeBar={closeBar} openBar={openBar} />
+          ) : (
+            <div />
+          )}
+        </Hidden>
+        <div
+          className={clsx(classes.content, {
+            [classes.contentShift]: isBarOpen
+          })}
+        >
+          <div>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/home" component={Home} />
+              <Route path="/browseproducts" component={BrowseProductsContainer} />
+              <Route path="/cart" component={CartPageContainer} />
+              <Route path="/callback" render={props => <Callback auth={this.auth} {...props} />} />
+              <Route
+                path="/account"
+                render={props =>
+                  this.auth.isAuthenticated() ? <Account auth={this.auth} {...props} /> : this.auth.login()
+                }
+              />
+
+              <Route path="*" component={NotFound} />
+            </Switch>
           </div>
-        </Router>
+        </div>
+        <Footer />
       </div>
     );
   }

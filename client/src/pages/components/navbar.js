@@ -1,21 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-
 import '../assets/navbar.css';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import ShoppingCartSharpIcon from '@material-ui/icons/ShoppingCartSharp';
+import clsx from 'clsx';
+import { Hidden } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 
 const Navbar = props => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const { classes, theme, isBarOpen, closeBar, openBar } = props;
+  const { login, logout, isAuthenticated } = props.auth;
 
   const toggleBar = () => {
     if (isBarOpen) closeBar();
@@ -23,7 +20,12 @@ const Navbar = props => {
   };
 
   return (
-    <AppBar position="static" className="appBar">
+    <AppBar
+      position="static"
+      className={clsx(classes.appBar, {
+        [classes.appBarShift]: isBarOpen
+      })}
+    >
       <Toolbar className={classes.toolbar}>
         <Typography variant="h6" className={classes.title}>
           <Link className={classes.title} to="/home">
@@ -52,27 +54,44 @@ const Navbar = props => {
           </Link>
         </Typography>
         <Typography variant="h6" className={classes.title}>
-          <Link className={classes.title} to="/signin">
-            Sign In
+          <Link className={classes.title} to="/custom">
+            Custom Order
           </Link>
+        </Typography>
+        <Typography>
+          {isAuthenticated() ? (
+            <Link className={classes.title} to="/account">
+              Account
+            </Link>
+          ) : (
+            <div />
+          )}
         </Typography>
         <Typography variant="h6" className={classes.title}>
           <Link className={classes.title} to="/cart">
             Cart
           </Link>
         </Typography>
-
-        <div>
-          <IconButton
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={toggleBar}
-            color="black"
-          >
-            <AccountCircle />
-          </IconButton>
-        </div>
+        <Button variant="outlined" onClick={isAuthenticated() ? logout : login}>
+          {isAuthenticated() ? 'Log Out' : 'Log In'}
+        </Button>
+        {isBarOpen ? (
+          <div />
+        ) : (
+          <Hidden lgDown>
+            <div>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={toggleBar}
+                color="black"
+              >
+                <ShoppingCartSharpIcon />
+              </IconButton>
+            </div>
+          </Hidden>
+        )}
       </Toolbar>
     </AppBar>
   );

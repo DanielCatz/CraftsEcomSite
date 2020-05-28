@@ -1,4 +1,5 @@
 import React from 'react';
+import { Fade, FormControlLabel, Switch as Boop } from '@material-ui/core';
 import BrowseProducts from './browseproducts';
 import createClient from '../Contentful';
 import LocalStorageMutator from './business/utils';
@@ -6,18 +7,21 @@ import LocalStorageMutator from './business/utils';
 class BrowseProductsContainer extends React.Component {
   constructor() {
     super();
-    this.state = { products: [] };
+    this.state = {
+      products: [],
+      isVisible: false
+    };
   }
 
   componentWillMount() {
     this.getProductsData();
-
   }
 
   getProductsData = async () => {
     try {
       const response = await createClient.getEntries({ content_type: 'flowerStoreProduct' });
-      this.setState({ products: response.items });
+      this.setState({ isVisible: true, products: response.items });
+
       console.log('Browse all pull');
     } catch (error) {
       console.log(error);
@@ -25,7 +29,12 @@ class BrowseProductsContainer extends React.Component {
   };
 
   render() {
-    return <BrowseProducts products={this.state.products} />;
+    const { isVisible, products } = this.state;
+    return (
+      <div>
+        <BrowseProducts products={products} checked={isVisible} />
+      </div>
+    );
   }
 }
 

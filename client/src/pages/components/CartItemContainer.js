@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CartItem from './CartItem';
-import { removeItem, addItem, removeAllSpecificItem, updateCartFromStorage } from '../../redux/actions/cartActions';
+import { removeItem, addItem, clearItem, updateCartFromStorage } from '../../redux/actions/cartActions';
 import LocalStorageMutator from '../business/utils';
+import Api from '../business/api';
 
 class CartItemContainer extends Component {
   addItem = () => {
@@ -15,8 +16,8 @@ class CartItemContainer extends Component {
     this.props.updateCartFromStorage(LocalStorageMutator.getCartFromLocalStorage());
   };
 
-  removeAllSpecificItem = () => {
-    LocalStorageMutator.removeAllSpecificItem(this.props.product);
+  clearItem = () => {
+    LocalStorageMutator.clearItem(this.props.product);
     this.props.updateCartFromStorage(LocalStorageMutator.getCartFromLocalStorage());
   };
 
@@ -25,7 +26,7 @@ class CartItemContainer extends Component {
       <div>
         <CartItem
           product={this.props.product}
-          clearItem={this.removeAllSpecificItem}
+          clearItem={this.clearItem}
           addItem={this.addItem}
           removeItem={this.removeItem}
         />
@@ -37,7 +38,7 @@ class CartItemContainer extends Component {
 const mapActionsToProp = {
   removeItem,
   addItem,
-  removeAllSpecificItem,
+  clearItem,
   updateCartFromStorage
 };
 export default connect(

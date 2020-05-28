@@ -2,7 +2,7 @@ import {
   ADD_ITEM,
   LOAD_CART,
   REMOVE_ITEM,
-  REMOVE_ALL_SPECIFIC_ITEM,
+  CLEAR_ITEM,
   REMOVE_ALL_ITEMS,
   UPDATE_CART_FROM_STORAGE
 } from '../actions/cartActions';
@@ -65,14 +65,13 @@ export default function cartReducer(state = INIT_STATE, action = {}) {
       return updatedCart;
     }
 
-    case REMOVE_ALL_SPECIFIC_ITEM: {
+    case CLEAR_ITEM: {
       const updatedCart = state;
       const { slug } = action.payload;
       const entryIndex = updatedCart.findIndex(x => x.key === slug);
 
       // remove entry
       if (entryIndex !== -1) updatedCart.splice(entryIndex, 1);
-
       return updatedCart;
     }
 

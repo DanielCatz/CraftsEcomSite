@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addItem } from '../redux/actions/cartActions';
+import { updateCartFromStorage } from '../redux/actions/cartActions';
 import ProductDisplayPage from './ProductDisplayPage';
 import createClient from '../Contentful';
 import LocalStorageMutator from './business/utils';
@@ -43,7 +43,8 @@ class ProductDisplayPageContainer extends Component {
         console.log(response);
       } else {
         // no matches in db, redirect to 404
-        console.log(404);
+        console.log("It's not you, it's me");
+        this.props.history.push('/notfound');
       }
     } catch (error) {
       console.log(error);
@@ -52,16 +53,8 @@ class ProductDisplayPageContainer extends Component {
   };
 
   addItem = () => {
-    /* if no local storage store
-     if local storage, grab, modify store
-    
-    then redux cart
-    */
-
     LocalStorageMutator.addProductToCartLocalStorage(this.state.product);
-
-    this.props.addItem(this.state.product);
-    console.log(LocalStorageMutator.getCartFromLocalStorage());
+    this.props.updateCartFromStorage(LocalStorageMutator.getCartFromLocalStorage());
   };
 
   render() {
@@ -74,7 +67,7 @@ class ProductDisplayPageContainer extends Component {
 
 const mapStateToProp = ({ cart }) => ({ cart });
 const mapActionsToProp = {
-  addItem
+  updateCartFromStorage
 };
 export default connect(
   mapStateToProp,
