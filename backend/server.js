@@ -59,6 +59,7 @@ app.use('/api', router);
 app.listen(3001);
 console.log(`Api Server listenening on ${process.env.REACT_APP_API_URL}`);
 
+module.exports = app;
 /*
 const app = express();
 const router = express.Router();
