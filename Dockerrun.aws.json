@@ -1,0 +1,97 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "volumes": [
+        {
+            "name": "myapp-server",
+            "host": {
+                "sourcePath": "/var/app/current/server"
+            }
+        },
+        {
+            "name": "myapp-client",
+            "host": {
+                "sourcePath": "/var/app/current/client"
+            }
+        },
+        {
+            "name": "myapp-mongodb",
+            "host": {
+                "sourcePath": "/var/app/current/mongodb"
+            }
+        }
+    ],
+    "containerDefinitions": [
+        {
+            "name": "myapp-server",
+            "image": "node:latest",
+            "essential": true,
+            "memory": 256,
+            "command": [
+                "/bin/bash",
+                "npm install",
+                "npm start"
+            ],
+            "portMappings": [
+                {
+                    "hostPort": 3001,
+                    "containerPort": 3001
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "myapp-server",
+                    "containerPath": "/usr/src/app"
+                }
+            ]
+        },
+        {
+            "name": "myapp-client",
+            "image": "node:latest",
+            "essential": true,
+            "memory": 512,
+            "command": [
+                "/bin/bash",
+                "npm install",
+                "npm start"
+            ],
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 3000
+                }
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "myapp-client",
+                    "containerPath": "/usr/src/app"
+                }
+            ]
+        },
+        {
+            "name": "myapp-mongodb",
+            "image": "mongo:latest",
+            "essential": true,
+            "memory": 256,
+            "portMappings": [
+                {
+                    "hostPort": 27017,
+                    "containerPort": 27017
+                }
+            ],
+            "links": [
+                "myapp-server",
+                "myapp-client"
+            ],
+            "mountPoints": [
+                {
+                    "sourceVolume": "myapp-mongodb",
+                    "containerPath": "/data/db"
+                },
+                {
+                    "sourceVolume": "myapp-mongodbconfig",
+                    "containerPath": "/data/configdb"
+                }
+            ]
+        }
+    ]
+}

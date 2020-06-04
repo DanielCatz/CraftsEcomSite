@@ -6,3 +6,7 @@ client/build/
 .env
 .env.default
 backend/db/test.db
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
