@@ -78,7 +78,7 @@ const Navbar = props => {
         {isBarOpen ? (
           <div />
         ) : (
-          <Hidden lgDown>
+          <Hidden smDown>
             <div>
               <IconButton
                 aria-label="account of current user"

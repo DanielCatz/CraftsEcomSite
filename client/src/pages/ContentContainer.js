@@ -39,7 +39,7 @@ class ContentContainer extends Component {
           openBar={openBar}
           auth={this.auth}
         />
-        <Hidden lgDown>
+        <Hidden smDown>
           {LocalStorageMutator.getCartFromLocalStorage().length > 0 ? (
             <CartBar classes={classes} theme={theme} isBarOpen={isBarOpen} closeBar={closeBar} openBar={openBar} />
           ) : (
