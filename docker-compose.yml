@@ -22,12 +22,14 @@ services:
       networks:
         - app-network  
     mongo:
-      image: mongo
+      image: mongo:latest
       container_name: myapp-mongodb
       ports:
         - "27017:27017"
       networks:
-        - app-network 
+        - app-network
+      volumes:
+        - data-volume:/data/db 
     client:
       build:
         context: ./client

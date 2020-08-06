@@ -26,11 +26,15 @@ const Navbar = props => {
         [classes.appBarShift]: isBarOpen
       })}
     >
+      <Button variant="outlined" color="secondary" href="https://github.com/DanielCatz/CraftsEcomSite">
+          This site is under active development
+        </Button>
       <Toolbar className={classes.toolbar}>
         <Typography variant="h6" className={classes.title}>
           <Link className={classes.title} to="/home">
             Home
           </Link>
+          
         </Typography>
         <Typography variant="h6" className={classes.title}>
           <Link className={classes.title} to="/featured">

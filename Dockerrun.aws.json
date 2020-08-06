@@ -1,6 +1,6 @@
 {
     "AWSEBDockerrunVersion": 2,
-    "volumes": [
+    "Volumes": [
         {
             "name": "myapp-server",
             "host": {
@@ -20,7 +20,7 @@
             }
         }
     ],
-    "containerDefinitions": [
+    "ContainerDefinitions": [
         {
             "name": "myapp-server",
             "image": "node:latest",
@@ -48,7 +48,7 @@
             "name": "myapp-client",
             "image": "node:latest",
             "essential": true,
-            "memory": 512,
+            "memory": 256,
             "command": [
                 "/bin/bash",
                 "npm install",
@@ -71,7 +71,7 @@
             "name": "myapp-mongodb",
             "image": "mongo:latest",
             "essential": true,
-            "memory": 256,
+            "memory": 512,
             "portMappings": [
                 {
                     "hostPort": 27017,
@@ -88,8 +88,8 @@
                     "containerPath": "/data/db"
                 },
                 {
-                    "sourceVolume": "myapp-mongodb",
-                    "containerPath": "/data/configdb"
+                    "sourceVolume": "awseb-logs-mongo-app",
+                    "containerPath": "/var/log/mongodb"
                 }
             ]
         }
