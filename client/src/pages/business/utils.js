@@ -35,6 +35,30 @@ const LocalStorageMutator = {
     localStorage.setItem('cart', JSON.stringify(cart));
   },
 
+  mergeSavedUserCartWithLocalStorageCart: products => {
+    let cart = LocalStorageMutator.getCartFromLocalStorage();
+
+    const { name, price, slug, images } = products;
+
+    const entryIndex = cart.findIndex(x => x.key === products.slug);
+
+    if (entryIndex >= 0) {
+      cart[entryIndex].quantity += 1;
+    } else {
+      const item = {
+        key: slug,
+        name,
+        price,
+        quantity: 1,
+        slug,
+        images
+      };
+      cart = [...cart, item];
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+  },
+
   removeProductFromCartLocalStorage: product => {
     const cart = LocalStorageMutator.getCartFromLocalStorage();
 

@@ -78,7 +78,6 @@ export const getsertUser = (req, res) => {
   }
   // Set role incase of insert
   body.role = 'customer';
-  // TODO: look into offloading roles to auth0
   const date = new Date(); // Now
   date.setDate(date.getDate() + 30);
   body.lastLogin = date;
@@ -90,14 +89,14 @@ export const getsertUser = (req, res) => {
       res.status(201).json({
         success: true,
         id: user._id,
-        message: 'Cart updated!',
+        message: 'User updated!',
         data
       });
     })
     .catch(error =>
       res.status(400).json({
         error,
-        message: 'Cart not created!'
+        message: 'User not created!'
       })
     );
 };

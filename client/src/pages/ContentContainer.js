@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Hidden } from '@material-ui/core';
 import clsx from 'clsx';
 import Home from './home';
-import NotFound from './notfound';
+import Construction from './Construction';
 import BrowseProductsContainer from './browseproductscontainer';
 import CartBar from './components/CartBar';
 import Navbar from './components/navbar';
@@ -65,7 +65,7 @@ class ContentContainer extends Component {
                 }
               />
 
-              <Route path="*" component={NotFound} />
+              <Route path="*" component={Construction} />
             </Switch>
           </div>
         </div>

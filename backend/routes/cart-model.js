@@ -5,9 +5,14 @@ const { Schema } = mongoose;
 const Cart = new Schema(
   {
     userid: { type: String, required: true },
-    productids: [{ type: String, required: false }],
-    quantities: [{ type: Number, required: false }],
-    expiryDate: Number
+    items:[
+      {
+        slug: { type: String, required: false },
+        name:{ type: String, required: false },
+        quantity: { type: Number, required: false }
+      }
+    ],
+    expiryDate: { type: Number, required: false }
   },
   { timestamps: true }
 );

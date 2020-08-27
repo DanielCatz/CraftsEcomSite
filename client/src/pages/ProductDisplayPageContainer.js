@@ -35,7 +35,7 @@ class ProductDisplayPageContainer extends Component {
       console.log(slug);
       const response = await createClient.getEntries({
         content_type: 'flowerStoreProduct',
-        'fields.slug[match]': slug,
+        'fields.slug': slug,
         include: 3
       });
       if (response.items[0].fields) {

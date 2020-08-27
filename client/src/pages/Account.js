@@ -26,14 +26,17 @@ class Account extends Component {
 
   getProductsData = async slug => {
     try {
-      console.log(slug);
       const response = await createClient.getEntries({
         content_type: 'flowerStoreProduct',
-        'fields.slug[in]': slug
+        'fields.slug[in]': slug.toString()
       });
+      
       if (response.items.length > 0) {
-        const items = response.items.length;
-        console.log(items);
+        const items = response.items;
+        for(var item of items){
+          // this.addItem(item);
+          console.log(item);
+        }
       } else {
         console.log('missing');
       }
@@ -41,6 +44,7 @@ class Account extends Component {
       console.log(error);
     }
   };
+
 
   loadUserProfile = () => {
     this.props.auth.getProfile((profile, error) => {
@@ -68,11 +72,19 @@ class Account extends Component {
   loadCart = async () => {
     const id = this.props.auth.getUId();
     try {
+      //get cart state from last visit
       const response = await Api.getCart(id);
-      console.log(response);
+      
+      let slugs = [];
+      for(var item of response.data.data[0].items){
+        slugs.push(item.slug);
+      }
+      //get updated info from Contentful to see if any items since last visit are out of stock
+      this.getProductsData(slugs);
+
     } catch (error) {
       // get where response._id same
-      console.log(error); // no cart
+      console.log(error.response); // no cart
     }
 
     // if respose good, add to local cart
@@ -85,8 +97,13 @@ class Account extends Component {
   upsertCart = async () => {
     const cart = LocalStorageMutator.getCartFromLocalStorage();
     const id = this.props.auth.getUId();
+    try{
     const response = await Api.upsertCart(id, cart);
     console.log(response);
+    }
+    catch(err){
+      console.log(err);  
+    }
   };
 
   render() {

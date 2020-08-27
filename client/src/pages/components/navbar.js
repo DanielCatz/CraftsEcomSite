@@ -34,7 +34,6 @@ const Navbar = props => {
           <Link className={classes.title} to="/home">
             Home
           </Link>
-          
         </Typography>
         <Typography variant="h6" className={classes.title}>
           <Link className={classes.title} to="/featured">
