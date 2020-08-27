@@ -89,13 +89,14 @@ export const getCart = async (req, res)=>{
       error: 'You must provide a user'
     });
   }
-  await Cart.find({userid: body.id}, (err, cart) => {
+  await Cart.findOne({userid: body.id},'items.name items.slug items.quantity' , (err, cart) => {
     if (err) return res.status(400).json({ success: false, error: err });
 
-    if (!cart.length) return res.status(404).json({ success: false, error: 'No Cart Found' });
+    if (!cart) return res.status(404).json({ success: false, error: 'No Cart Found' });
 
-    return res.status(200).json({ success: true, data: cart });
-  }).catch(err => console.log(err));
+    return res.status(200).json({ success: true, cart });
+  })
+  .catch(err => console.log(err));
 
 
 };

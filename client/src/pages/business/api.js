@@ -12,7 +12,11 @@ const API = {
 
   createUser: user => axios.post(`${API_URL}api/createUser`, user),
 
-  getCart: id => axios.get(`${API_URL}api/getCart/${id}`),
+  getCart: id => axios.get(`${API_URL}api/getCart/${id}`)
+  .then(res => {   
+    return (res.data.cart.items);
+  })
+  .catch(error => console.log('print them errors', error.response)),
 
   upsertCart: (id, cart) => axios.post(`${API_URL}api/upsertCart`, { id, cart }), // TODO:
   

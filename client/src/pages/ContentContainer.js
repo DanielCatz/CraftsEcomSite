@@ -24,7 +24,10 @@ class ContentContainer extends Component {
   }
 
   componentWillMount() {
+    // check user login state scenarios
     this.props.loadCartFromLocalStorage(LocalStorageMutator.getCartFromLocalStorage());
+
+
   }
 
   render() {

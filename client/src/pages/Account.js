@@ -37,6 +37,10 @@ class Account extends Component {
           // this.addItem(item);
           console.log(item);
         }
+        /*
+        TODO: add products to a psuedo cart
+              merge the cart @ mergeSavedUserCartWithLocalStorageCart in utils.js
+        */
       } else {
         console.log('missing');
       }
@@ -75,12 +79,12 @@ class Account extends Component {
       //get cart state from last visit
       const response = await Api.getCart(id);
       
-      let slugs = [];
-      for(var item of response.data.data[0].items){
-        slugs.push(item.slug);
-      }
+    console.log(response);
       //get updated info from Contentful to see if any items since last visit are out of stock
-      this.getProductsData(slugs);
+      //this.getProductsData(slugs);
+
+      // map to product format reducer will like
+
 
     } catch (error) {
       // get where response._id same
