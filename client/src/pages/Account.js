@@ -3,7 +3,6 @@ import { Button } from '@material-ui/core';
 import Api from './business/api';
 import LocalStorageMutator from './business/utils';
 import createClient from '../Contentful';
-
 class Account extends Component {
   state = {
     message: ''
@@ -24,26 +23,17 @@ class Account extends Component {
       .catch(error => this.setState({ message: error.message }));
   }
 
-  getProductsData = async slug => {
+  getProductsData = async slugs => {
     try {
       const response = await createClient.getEntries({
         content_type: 'flowerStoreProduct',
-        'fields.slug[in]': slug.toString()
+        'fields.slug[in]': slugs.toString()
       });
       
-      if (response.items.length > 0) {
-        const items = response.items;
-        for(var item of items){
-          // this.addItem(item);
-          console.log(item);
-        }
-        /*
-        TODO: add products to a psuedo cart
-              merge the cart @ mergeSavedUserCartWithLocalStorageCart in utils.js
-        */
-      } else {
+      if (response.items.length > 0) 
+        return response.items;        
+      else 
         console.log('missing');
-      }
     } catch (error) {
       console.log(error);
     }
@@ -77,14 +67,33 @@ class Account extends Component {
     const id = this.props.auth.getUId();
     try {
       //get cart state from last visit
-      const response = await Api.getCart(id);
+      const cart = await Api.getCart(id);
       
-    console.log(response);
-      //get updated info from Contentful to see if any items since last visit are out of stock
-      //this.getProductsData(slugs);
+      if(cart.length > 0){
+        let slugs = cart.map(x => x.slug);
+        let products = await this.getProductsData(slugs);
+        
+        if(products){
+          // map to cart to LS format
+          let contentfulStock = LocalStorageMutator.mapContentfulDataToLSCartShape(products);
+          let dbCart = LocalStorageMutator.mapMongoDataToLSCartShape(cart, contentfulStock);
+          let localCart = LocalStorageMutator.getCartFromLocalStorage();
+          
+          console.table('contentful stock',contentfulStock);
+          console.table('dbcart',dbCart);
+          console.table('clocal cart',localCart);          
+          
+          /*TODO: add products to a psuedo cart
+                merge the cart @ mergeSavedCartWithLSCart in utils.js
+          */
+         //get updated info from Contentful to see if any items since last visit are out of stock and update LS and get images
+         //get max of product that were already in cart + those loaded in
+         let finalCart = LocalStorageMutator.mergeSavedCartWithLSCart(dbCart);
 
-      // map to product format reducer will like
+         //update redux
+        }      
 
+      }
 
     } catch (error) {
       // get where response._id same
