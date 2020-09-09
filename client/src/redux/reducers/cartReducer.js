@@ -7,8 +7,8 @@ import {
   UPDATE_CART_FROM_STORAGE
 } from '../actions/cartActions';
 /*
-Cart Shape
-{
+Cart Object
+{ Product Shape
     key:  could use slug/ entry id ,
     name: 'redux item 1',
     price: decimal value
@@ -16,30 +16,29 @@ Cart Shape
     images: uri for display purposes,
     quantity: ammount in cart
   },
+  {...},
 
 */
 
-const INIT_STATE = [];
+const INIT_STATE = {};
 
 export default function cartReducer(state = INIT_STATE, action = {}) {
   switch (action.type) {
     case ADD_ITEM: {
       let updatedCart = state;
       const { name, price, slug, images } = action.payload;
-      const entryIndex = updatedCart.findIndex(x => x.key === slug);
+      
 
-      if (entryIndex >= 0) {
-        updatedCart[entryIndex].quantity += 1;
+      if (updatedCart[slug]) {
+        updatedCart[slug].quantity += 1;
       } else {
-        const item = {
-          key: slug,
+        updatedCart[slug] = {
           name,
           price,
           quantity: 1,
           slug,
           images
         };
-        updatedCart = [...updatedCart, item];
       }
 
       return updatedCart;
@@ -47,14 +46,13 @@ export default function cartReducer(state = INIT_STATE, action = {}) {
     case REMOVE_ITEM: {
       const updatedCart = state;
       const { name, price, slug, images } = action.payload;
-      const entryIndex = updatedCart.findIndex(x => x.key === slug);
 
-      if (entryIndex !== -1 && updatedCart[entryIndex].quantity >= 2) {
+      if (updatedCart[slug] && updatedCart[slug].quantity >= 2) {
         // find and decrement
-        updatedCart[entryIndex].quantity -= 1;
+        updatedCart[slug].quantity -= 1;
       } else {
         // remove entry
-        updatedCart.splice(entryIndex, 1);
+        updatedCart[slug] = null;
       }
 
       return updatedCart;
@@ -68,17 +66,14 @@ export default function cartReducer(state = INIT_STATE, action = {}) {
     case CLEAR_ITEM: {
       const updatedCart = state;
       const { slug } = action.payload;
-      const entryIndex = updatedCart.findIndex(x => x.key === slug);
-
-      // remove entry
-      if (entryIndex !== -1) updatedCart.splice(entryIndex, 1);
+      updatedCart[slug] = null;
       return updatedCart;
     }
 
     case LOAD_CART: {
       let updatedCart = state;
       const cart = action.payload;
-      updatedCart = [...updatedCart, ...cart];
+      updatedCart = cart;
 
       return updatedCart;
     }
@@ -86,8 +81,7 @@ export default function cartReducer(state = INIT_STATE, action = {}) {
     case UPDATE_CART_FROM_STORAGE: {
       let updatedCart = state;
       const cart = action.payload;
-      updatedCart = [...cart];
-
+      updatedCart = cart;
       return updatedCart;
     }
 

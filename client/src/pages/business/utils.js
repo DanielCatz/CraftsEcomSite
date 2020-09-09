@@ -3,7 +3,7 @@
 const LocalStorageMutator = {
   getCartFromLocalStorage: () => {
     const existing = localStorage.getItem('cart');
-    const data = existing || '[]';
+    const data = existing || '{}';
     return JSON.parse(data);
   },
 
@@ -13,54 +13,51 @@ const LocalStorageMutator = {
   },
   addProductToCartLocalStorage: product => {
     let cart = LocalStorageMutator.getCartFromLocalStorage();
-
-    const { name, price, slug, images } = product;
-
-    const entryIndex = cart.findIndex(x => x.key === product.slug);
-
-    if (entryIndex >= 0) {
-      cart[entryIndex].quantity += 1;
-    } else {
-      const item = {
-        key: slug,
-        name,
-        price,
-        quantity: 1,
-        slug,
-        images
-      };
-      cart = [...cart, item];
-    }
-
+    
+      cart[product.slug] = {
+        key: product.slug,
+        name: product.name,
+        price: product.price,
+        quantity: cart[product.slug] ? cart[product.slug].quantity + 1 : 1,
+        slug: product.slug,
+        images: product.images
+      }
+    
     localStorage.setItem('cart', JSON.stringify(cart));
   },
 
   mergeSavedCartWithLSCart: (dbCart) => {
    let localCart = LocalStorageMutator.getCartFromLocalStorage();
-    
+   if(localCart.length === 0){
+      return dbCart; 
+   }
+   
+   let finalCart = [];
+   let product;
+   for(var item of localCart){
+    // entryIndex = missingData.findIndex(x => x.key === item.slug);
+
+    //if()
+
+
+    }
+     
     return dbCart;
   },
 
   removeProductFromCartLocalStorage: product => {
     const cart = LocalStorageMutator.getCartFromLocalStorage();
 
-    const entryIndex = cart.findIndex(x => x.key === product.slug);
-
-    if (entryIndex !== -1 && cart[entryIndex].quantity >= 2) {
-      cart[entryIndex].quantity -= 1;
-    } else {
-      cart.splice(entryIndex, 1);
-    }
+    if(cart[product.slug])
+    cart[product.slug].quantity -=1;
 
     localStorage.setItem('cart', JSON.stringify(cart));
   },
 
   clearProductFromCartLocalStorage: product => {
     const cart = LocalStorageMutator.getCartFromLocalStorage();
-
-    const entryIndex = cart.findIndex(x => x.key === product.slug);
-    // remove entry
-    if (entryIndex !== -1) cart.splice(entryIndex, 1);
+    if(cart[product.slug])
+      cart[product.slug] = null;
     localStorage.setItem('cart', JSON.stringify(cart));
   },
   

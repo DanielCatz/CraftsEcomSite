@@ -19,8 +19,8 @@ import { addItem } from '../../redux/actions/cartActions';
 
 const CartBar = props => {
   const { cart, classes, theme, isBarOpen, closeBar, openBar } = props;
-
-  const cartList = cart.map(item => (
+  const cartObjs = Object.values(cart);
+  const cartList = cartObjs.map(item => (
     <div>
       <ListItem button>
         <CartItemContainer product={item} key={item.key} />

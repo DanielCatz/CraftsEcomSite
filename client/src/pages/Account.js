@@ -81,9 +81,9 @@ class Account extends Component {
           
           console.table('contentful stock',contentfulStock);
           console.table('dbcart',dbCart);
-          console.table('clocal cart',localCart);          
+          console.table('local cart',localCart);          
           
-          /*TODO: add products to a psuedo cart
+          /*TODO: 
                 merge the cart @ mergeSavedCartWithLSCart in utils.js
           */
          //get updated info from Contentful to see if any items since last visit are out of stock and update LS and get images

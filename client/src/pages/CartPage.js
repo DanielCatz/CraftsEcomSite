@@ -4,8 +4,8 @@ import CartPageItemContainer from './components/CartPageItemContainer';
 
 const CartPage = props => {
   const { cart } = props;
-
-  const cartList = cart.map(product => <CartPageItemContainer product={product} key={product.key} />);
+  const cartObjArr = Object.values(cart);
+  const cartList = cartObjArr.map(product => <CartPageItemContainer product={product} key={product.key} />);
   return (
     <div>
       <div> Cart Page </div>
